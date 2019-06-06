@@ -4,13 +4,18 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.5.13"
+  },
+  "devDependencies": {
     "nodemon": "^1.19.1"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "concurrently \"cd . && nodemon server.js\" \"cd client && npm start\""
   },
   "author": "JJX",
   "license": "ISC"
