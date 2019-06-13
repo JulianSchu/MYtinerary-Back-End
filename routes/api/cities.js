@@ -8,18 +8,18 @@ router.post("/", (req, res, next) => {
     const city = new City({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        value: req.body.value,
+        imgUrl: req.body.imgUrl,
         country: req.body.country
     });
 
     City.find({
-            name: city.name
+            _id: city._id
         })
         .exec()
         .then(doc => {
-            console.log(doc);
-            if (doc) {
+            if (doc.length !== 0) {
                 console.log('The city already exists!');
+                console.log(doc.length)
                 res.status(208).json({
                     message: 'The city already exists!',
                     city: doc
@@ -54,7 +54,6 @@ router.get("/:cityId", (req, res, next) => {
     City.findById(id)
         .exec()
         .then(doc => {
-            console.log(doc);
             if (doc) {
                 res.status(200).json(doc);
             } else {
@@ -73,10 +72,10 @@ router.get("/:cityId", (req, res, next) => {
 
 router.get("/", (req, res, next) => {
     City.find()
-        .exec()
+        .sort({name: 1})
         .then(docs => {
-            console.log(docs);
             res.status(200).json(docs)
+            console.log(docs)
         })
         .catch(err => {
             console.log(err);
@@ -84,7 +83,6 @@ router.get("/", (req, res, next) => {
                 error: err
             });
         })
-    // res.send("Hello world");
 });
 
 router.delete("/:cityId", (req, res, next) => {

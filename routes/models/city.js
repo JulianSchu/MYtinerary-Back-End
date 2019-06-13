@@ -6,7 +6,7 @@ const citySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    value: {
+    imgUrl: {
         type: String,
         required: true
     },
