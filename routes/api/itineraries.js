@@ -2,44 +2,29 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require('mongoose')
 
-const City = require('../models/city')
+const Itinerary = require('../models/itinerary')
 
 router.post("/", (req, res, next) => {
-    const city = new City({
+
+    const itinerary = new Itinerary({
         _id: new mongoose.Types.ObjectId(),
+        title: req.body.title,
         name: req.body.name,
-        imgUrl: req.body.imgUrl,
-        country: req.body.country
+        profilePic: req.body.profilePic,
+        likes: req.body.likes,
+        duration: req.body.duration,
+        price: req.body.price,
+        hashtag: req.body.hashtag,
+        created: req.body.created
     });
 
-    City.find({
-            _id: city._id
-        })
-        .exec()
-        .then(doc => {
-            if (doc.length !== 0) {
-                console.log('The city already exists!');
-                console.log(doc.length)
-                res.status(208).json({
-                    message: 'The city already exists!',
-                    city: doc
-                })
-            } else {
-                city.save()
-                    .then(result => {
-                        console.log(result);
-                        res.status(201).json({
-                            message: 'posted',
-                            createdCity: result
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json({
-                            error: err
-                        });
-                    })
-            }
+    itinerary.save()
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                message: 'posted',
+                createdItinerary: result
+            })
         })
         .catch(err => {
             console.log(err);
@@ -47,11 +32,11 @@ router.post("/", (req, res, next) => {
                 error: err
             });
         })
-})
+});
 
-router.get("/:cityId", (req, res, next) => {
-    const id = req.params.cityId;
-    City.findById(id)
+router.get("/:itineraryId", (req, res, next) => {
+    const id = req.params.itineraryId;
+    Itinerary.findById(id)
         .exec()
         .then(doc => {
             if (doc) {
@@ -71,8 +56,10 @@ router.get("/:cityId", (req, res, next) => {
 })
 
 router.get("/", (req, res, next) => {
-    City.find()
-        .sort({name: 1})
+    Itinerary.find()
+        .sort({
+            created: -1
+        })
         .then(docs => {
             res.status(200).json(docs)
             console.log(docs)
@@ -85,9 +72,9 @@ router.get("/", (req, res, next) => {
         })
 });
 
-router.delete("/:cityId", (req, res, next) => {
-    const id = req.params.cityId;
-    City.remove({
+router.delete("/:itineraryId", (req, res, next) => {
+    const id = req.params.itineraryId;
+    Itinerary.remove({
             _id: id
         })
         .exec()

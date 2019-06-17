@@ -1,5 +1,6 @@
 const express = require ('express');
 const citiesRoute = require("./routes/api/cities");
+const itinerariesRoute = require("./routes/api/itineraries")
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -15,6 +16,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(cors());
 
 app.use("/api/cities", citiesRoute);
+app.use("/api/itineraries", itinerariesRoute);
 
 const port = process.env.PORT || 5000;
 
