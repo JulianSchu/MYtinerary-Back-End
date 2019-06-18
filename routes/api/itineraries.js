@@ -9,6 +9,8 @@ router.post("/", (req, res, next) => {
     const itinerary = new Itinerary({
         _id: new mongoose.Types.ObjectId(),
         title: req.body.title,
+        city: req.body.city,
+        country: req.body.country,
         name: req.body.name,
         profilePic: req.body.profilePic,
         likes: req.body.likes,
@@ -34,16 +36,16 @@ router.post("/", (req, res, next) => {
         })
 });
 
-router.get("/:itineraryId", (req, res, next) => {
-    const id = req.params.itineraryId;
-    Itinerary.findById(id)
+router.get("/:itineraryCity", (req, res, next) => {
+    const city = req.params.itineraryCity;
+    Itinerary.find({ city })
         .exec()
         .then(doc => {
             if (doc) {
                 res.status(200).json(doc);
             } else {
                 res.status(404).json({
-                    message: 'No valid entry for provided ID'
+                    message: 'For this city there is no itinerary yet.'
                 });
             }
         })
