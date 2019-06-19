@@ -37,6 +37,10 @@ const itinerarySchema = mongoose.Schema({
         type: String,
         required: true
     },
+    activities: {
+        type: Array,
+        default: [{url: 'There is no activities to show yet.'}]
+    },
     hashtag: {
         type: String
     },

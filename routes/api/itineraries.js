@@ -17,6 +17,7 @@ router.post("/", (req, res, next) => {
         duration: req.body.duration,
         price: req.body.price,
         description: req.body.description,
+        activities: req.body.activities,
         hashtag: req.body.hashtag,
         created: req.body.created
     });
