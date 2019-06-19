@@ -16,6 +16,7 @@ router.post("/", (req, res, next) => {
         likes: req.body.likes,
         duration: req.body.duration,
         price: req.body.price,
+        description: req.body.description,
         hashtag: req.body.hashtag,
         created: req.body.created
     });
