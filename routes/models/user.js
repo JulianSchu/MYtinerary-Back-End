@@ -11,14 +11,16 @@ const userSchema = mongoose.Schema({
         required: true
     },
     profilPic: {
-        type: String
+        type: String,
+        default: 'https://i0.wp.com/images-prod.healthline.com/hlcmsresource/images/AN_images/banana-pink-background-thumb.jpg?w=756'
     },
     password: {
         type: String,
         required: true
     },
-    passwordConfirm: {
+    country: {
         type: String,
+        default: 'Wonderland'
     }
 });
 

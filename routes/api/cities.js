@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const auth = require('../../middleware/auth')
 
 const City = require('../models/city')
 
-router.post("/", (req, res, next) => {
+router.post("/", auth, (req, res) => {
     const city = new City({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -70,7 +71,7 @@ router.post("/", (req, res, next) => {
 //         })
 // })
 
-router.get("/ChosenCity/:cityName", (req, res, next) => {
+router.get("/ChosenCity/:cityName", (req, res) => {
     const name = req.params.cityName;
     City.find({ name })
         .exec()
@@ -91,7 +92,7 @@ router.get("/ChosenCity/:cityName", (req, res, next) => {
         })
 })
 
-router.get("/", (req, res, next) => {
+router.get("/", (res) => {
     City.find()
         .sort({name: 1})
         .then(docs => {
@@ -106,7 +107,7 @@ router.get("/", (req, res, next) => {
         })
 });
 
-router.delete("/:cityId", (req, res, next) => {
+router.delete("/:cityId", auth, (req, res) => {
     const id = req.params.cityId;
     City.remove({
             _id: id

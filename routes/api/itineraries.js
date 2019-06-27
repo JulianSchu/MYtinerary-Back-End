@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const auth = require('../../middleware/auth')
 
 const Itinerary = require('../models/itinerary')
 
-router.post("/", (req, res, next) => {
+router.post("/", auth, (req, res) => {
 
     const itinerary = new Itinerary({
         _id: new mongoose.Types.ObjectId(),
@@ -38,7 +39,7 @@ router.post("/", (req, res, next) => {
         })
 });
 
-router.get("/:itineraryCity", (req, res, next) => {
+router.get("/:itineraryCity", (req, res) => {
     const city = req.params.itineraryCity;
     Itinerary.find({ city })
         .exec()
@@ -59,7 +60,7 @@ router.get("/:itineraryCity", (req, res, next) => {
         })
 })
 
-router.get("/", (req, res, next) => {
+router.get("/", (res) => {
     Itinerary.find()
         .sort({
             created: -1
@@ -76,7 +77,7 @@ router.get("/", (req, res, next) => {
         })
 });
 
-router.delete("/:itineraryId", (req, res, next) => {
+router.delete("/:itineraryId", auth, (req, res) => {
     const id = req.params.itineraryId;
     Itinerary.remove({
             _id: id
