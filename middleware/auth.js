@@ -3,17 +3,15 @@ const jwt = require('jsonwebtoken')
 function auth(req, res, next) {
     const token = req.header('x-access-token');
 
-    if(!token) {
-        res.status(401).json({msg: 'please login or the user is unauthorized'});
-    }
-
+    if(!token) return res.status(401).send('Please login or the user is unauthorized');
+    
     try {
     const decoded = jwt.verify(token, process.env.SECRET);
     req.user = decoded;
     next();
     }
     catch(err) {
-        res.status(400).json({err, msg: 'Token is not valid'})
+        res.status(400).send('Token is not valid')
     }
 }
 

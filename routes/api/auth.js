@@ -7,17 +7,24 @@ const auth = require('../../middleware/auth')
 const User = require('../models/user')
 
 router.post("/", (req, res) => {
+
     const { email, password } = req.body;
 
-    if(!email || !password) return res.status(400).json({msg: 'Please enter all fileds'});
+    if(!email || !password) {
+        return res.status(400).send('Please enter all fileds');
+    }
 
     User.findOne({ email })
     .then(user => {
-        if(!user) return res.status(400).json({msg: 'User does not exists'});
+        if(!user) {
+            return res.status(400).send('User does not exists');
+        }
 
         bcrypt.compare(password, user.password)
         .then(isMatch => {
-            if(!isMatch) return res.status(400).json({msg: 'Wrong password'});
+            if(!isMatch) {
+                return res.status(400).send('Wrong password');
+            }
 
             jwt.sign(
                 {id: user._id}, 
@@ -27,11 +34,7 @@ router.post("/", (req, res) => {
                     if(err) throw err;
                     res.json({
                         token,
-                        user: {
-                            id: user._id,
-                            userName: user.userName,
-                            email: user.email
-                    }
+                        user
                 });
             });
         })
@@ -41,7 +44,8 @@ router.post("/", (req, res) => {
 router.get('/user', auth, (req, res) => {
     User.findById(req.user.id)
     .select('-password')
-    .then(user => res.json(user))
+    .then((user) => 
+        res.json(user))
 });
 
 module.exports = router;

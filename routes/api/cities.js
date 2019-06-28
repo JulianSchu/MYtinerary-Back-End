@@ -19,20 +19,15 @@ router.post("/", auth, (req, res) => {
         .exec()
         .then(doc => {
             if (doc.length !== 0) {
-                console.log('The city already exists!');
-                console.log(doc.length)
-                res.status(208).json({
-                    message: 'The city already exists!',
-                    city: doc
-                })
+                res.status(208).send('The city already exists!')
             } else {
                 city.save()
                     .then(result => {
                         console.log(result);
-                        res.status(201).json({
-                            message: 'posted',
-                            createdCity: result
-                        })
+                        // res.status(201).json({
+                        //     message: 'posted',
+                        //     createdCity: result
+                        // })
                     })
                     .catch(err => {
                         console.log(err);
@@ -79,9 +74,7 @@ router.get("/ChosenCity/:cityName", (req, res) => {
             if (doc) {
                 res.status(200).json(doc);
             } else {
-                res.status(404).json({
-                    message: 'No valid entry for provided city'
-                });
+                res.status(404).send('No valid entry for provided city');
             }
         })
         .catch(err => {
@@ -92,7 +85,7 @@ router.get("/ChosenCity/:cityName", (req, res) => {
         })
 })
 
-router.get("/", (res) => {
+router.get("/", (req, res) => {
     City.find()
         .sort({name: 1})
         .then(docs => {
