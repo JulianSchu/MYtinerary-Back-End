@@ -9,7 +9,7 @@ const User = require('../models/user')
 
 router.post("/", (req, res) => {
 
-    const { userName, email, password, passwordConfirm, profilPic, country} = req.body;
+    const { userName, email, password, passwordConfirm, profilPic, country, tpAgreed} = req.body;
 
     if(!userName || !email || !password || !passwordConfirm) {
         // return res.status(400).send('Please enter all fields!')
@@ -18,6 +18,14 @@ router.post("/", (req, res) => {
 
     if(password !== passwordConfirm) {
         return res.status(400).send('The passwords do not match. Please check again')
+    }
+
+    if(password.length < 8 || !/[A-Z]/g.test(password) || !/[a-z]/g.test(password) || !/[0-9]/g.test(password)) {
+        return res.status(400).send('Please match the password requirement!')
+    }
+
+    if(!tpAgreed) {
+        return res.status(400).send('Please read and agree on our terms & policies!')
     }
     
     User.findOne({ userName})
