@@ -23,11 +23,10 @@ router.post("/", auth, (req, res) => {
             } else {
                 city.save()
                     .then(result => {
-                        console.log(result);
-                        // res.status(201).json({
-                        //     message: 'posted',
-                        //     createdCity: result
-                        // })
+                        res.status(201).json({
+                            message: 'posted',
+                            createdCity: result
+                        })
                     })
                     .catch(err => {
                         console.log(err);
@@ -44,27 +43,6 @@ router.post("/", auth, (req, res) => {
             });
         })
 })
-
-// router.get("/:cityId", (req, res, next) => {
-//     const id = req.params.cityId;
-//     City.findById(id)
-//         .exec()
-//         .then(doc => {
-//             if (doc) {
-//                 res.status(200).json(doc);
-//             } else {
-//                 res.status(404).json({
-//                     message: 'No valid entry for provided ID'
-//                 });
-//             }
-//         })
-//         .catch(err => {
-//             console.log(err);
-//             res.status(500).json({
-//                 error: err
-//             });
-//         })
-// })
 
 router.get("/ChosenCity/:cityName", (req, res) => {
     const name = req.params.cityName;
@@ -90,7 +68,6 @@ router.get("/", (req, res) => {
         .sort({name: 1})
         .then(docs => {
             res.status(200).json(docs)
-            console.log(docs)
         })
         .catch(err => {
             console.log(err);

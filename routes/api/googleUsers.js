@@ -15,6 +15,30 @@ router.post("/", (req, res) => {
     GoogleUser.findOne({ unique })
     .then(user => {
         if(!user) {
+            const newGoogleUser = new GoogleUser({
+                _id: new mongoose.Types.ObjectId(),
+                unique,
+                userName,
+                email,
+                profilPic
+            });
+
+            newGoogleUser.save()
+            .then(user => {
+                jwt.sign({
+                    id: user._id}, 
+                    process.env.SECRET, 
+                    {expiresIn: '365d'},
+                    (err, token) => {
+                        if(err) throw err;
+                        res.status(201).json({
+                            token,
+                            msg: 'created',
+                            user
+                        });
+                    });
+                })           
+        } else {
             jwt.sign(
                 {id: user._id}, 
                 process.env.SECRET, 
@@ -25,34 +49,10 @@ router.post("/", (req, res) => {
                         token,
                         user
                 });
-            });           
-        } else {
-                const newGoogleUser = new GoogleUser({
-                    _id: new mongoose.Types.ObjectId(),
-                    unique,
-                    userName,
-                    email,
-                    profilPic
-                });
-
-                newGoogleUser.save()
-                .then(user => {
-                    jwt.sign({
-                        id: user._id}, 
-                        process.env.SECRET, 
-                        {expiresIn: '365d'},
-                        (err, token) => {
-                            if(err) throw err;
-                            res.status(201).json({
-                                token,
-                                msg: 'created',
-                                user
-                            });
-                        });
-                    })
-                }
-            })
-        })
+            });
+        }
+    })
+})
 
 router.get("/", (req, res, next) => {
     GoogleUser.find()

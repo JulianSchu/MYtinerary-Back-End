@@ -14,26 +14,23 @@ const itinerarySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    name: {
+    userName: {
         type: String,
         required: true
     },
-    profilePic: {
+    profilPic: {
         type: String,
         required: true
     },
     likes: {
         type: Number,
+        default: 0
     },
     duration: {
         type: Number,
         required: true
     },
     price: {
-        type: String,
-        required: true
-    },
-    description: {
         type: String,
         required: true
     },

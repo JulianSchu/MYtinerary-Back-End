@@ -7,37 +7,61 @@ const Itinerary = require('../models/itinerary')
 
 router.post("/", auth, (req, res) => {
 
-    const itinerary = new Itinerary({
+    const { title, city, country, userName, profilPic, duration, price, activities, hashtag } = req.body;
+
+    if(!title) {
+        return res.status(400).send('Please enter title!');
+    }
+
+    if(!city) {
+        return res.status(400).send('Please enter city!');
+    }
+
+    if(!country) {
+        return res.status(400).send('Please enter country!');
+    }
+
+    if(!userName) {
+        return res.status(400).send('Please enter userName!');
+    }
+
+    if(!profilPic) {
+        return res.status(400).send('Please enter profilPic!');
+    }
+    
+    if(!duration) {
+        return res.status(400).send('Please enter duration!');
+    }
+
+    const newItinerary = new Itinerary({
         _id: new mongoose.Types.ObjectId(),
-        title: req.body.title,
-        city: req.body.city,
-        country: req.body.country,
-        name: req.body.name,
-        profilePic: req.body.profilePic,
-        likes: req.body.likes,
-        duration: req.body.duration,
-        price: req.body.price,
-        description: req.body.description,
-        activities: req.body.activities,
-        hashtag: req.body.hashtag,
-        created: req.body.created
+        userName,
+        title, 
+        city, 
+        country,
+        profilPic, 
+        duration, 
+        price, 
+        activities, 
+        hashtag
     });
 
-    itinerary.save()
+    newItinerary.save()
         .then(result => {
             console.log(result);
             res.status(201).json({
                 message: 'posted',
-                createdItinerary: result
+                newItinerary: result
             })
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({
                 error: err
-            });
-        })
-});
+        });
+    })
+})
+
 
 router.get("/:itineraryCity", (req, res) => {
     const city = req.params.itineraryCity;
@@ -57,6 +81,7 @@ router.get("/:itineraryCity", (req, res) => {
             });
         })
 })
+
 
 router.get("/", (res) => {
     Itinerary.find()
