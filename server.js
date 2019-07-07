@@ -3,7 +3,8 @@ const citiesRoute = require("./routes/api/cities");
 const itinerariesRoute = require("./routes/api/itineraries");
 const usersRoute = require("./routes/api/users");
 const authRoute = require("./routes/api/auth");
-const googleUserRoute = require("./routes/api/googleUsers")
+const googleUserRoute = require("./routes/api/googleUsers");
+const commentRoute = require('./routes/api/comments')
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 const cors = require("cors");
@@ -23,6 +24,7 @@ app.use("/api/itineraries", itinerariesRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/googleUsers", googleUserRoute);
+app.use("/api/comments", commentRoute);
 
 
 const port = process.env.PORT || 5000;

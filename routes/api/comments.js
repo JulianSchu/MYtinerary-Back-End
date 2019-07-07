@@ -3,56 +3,51 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const auth = require('../../middleware/auth')
 
-const City = require('../models/city')
+const Comment = require('../models/comment')
 
 router.post("/", auth, (req, res) => {
-    const city = new City({
+
+    const { userName, userId, profilPic, comment, itId, created } = req.body;
+    
+    if(!comment) {
+        return res.status(400).send('Please leave a comment!');
+    }
+
+    const newComment = new Comment({
         _id: new mongoose.Types.ObjectId(),
-        name: req.body.name,
-        imgUrl: req.body.imgUrl,
-        country: req.body.country
+        userName, 
+        userId, 
+        profilPic, 
+        comment, 
+        itId,
+        created
     });
 
-    City.find({
-            _id: city._id
-        })
-        .exec()
-        .then(doc => {
-            if (doc.length !== 0) {
-                res.status(208).send('The city already exists!')
-            } else {
-                city.save()
-                    .then(result => {
-                        res.status(201).json({
-                            message: 'posted',
-                            createdCity: result
-                        })
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        res.status(500).json({
-                            error: err
-                        });
-                    })
-            }
+    newComment.save()
+        .then(result => {
+            console.log(result);
+            res.status(201).json({
+                message: 'posted',
+                newComment: result
+            })
         })
         .catch(err => {
             console.log(err);
             res.status(500).json({
                 error: err
-            });
-        })
+        });
+    })
 })
 
-router.get("/ChosenCity/:id", (req, res) => {
-    const _id = req.params.id;
-    City.find({ _id })
+router.get("/:id", (req, res) => {
+    const itId = req.params.id;
+    Comment.find({ itId })
         .exec()
         .then(doc => {
             if (doc) {
                 res.status(200).json(doc);
             } else {
-                res.status(404).send('No valid entry for provided city');
+                res.status(404).send('For this itinerary there is no comments yet.');
             }
         })
         .catch(err => {
@@ -64,10 +59,13 @@ router.get("/ChosenCity/:id", (req, res) => {
 })
 
 router.get("/", (req, res) => {
-    City.find()
-        .sort({name: 1})
+    Comment.find()
+        .sort({
+            created: -1
+        })
         .then(docs => {
             res.status(200).json(docs)
+            console.log(docs)
         })
         .catch(err => {
             console.log(err);
@@ -77,9 +75,10 @@ router.get("/", (req, res) => {
         })
 });
 
-router.delete("/:cityId", auth, (req, res) => {
-    const id = req.params.cityId;
-    City.remove({
+
+router.delete("/:id", auth, (req, res) => {
+    const id = req.params.id;
+    Itinerary.remove({
             _id: id
         })
         .exec()

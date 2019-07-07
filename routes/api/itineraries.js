@@ -7,7 +7,7 @@ const Itinerary = require('../models/itinerary')
 
 router.post("/", auth, (req, res) => {
 
-    const { title, city, country, userName, profilPic, duration, price, activities, hashtag } = req.body;
+    const { title, city, cityId, country, userName, profilPic, duration, price, activities, hashtag } = req.body;
 
     if(!title) {
         return res.status(400).send('Please enter title!');
@@ -38,6 +38,7 @@ router.post("/", auth, (req, res) => {
         userName,
         title, 
         city, 
+        cityId,
         country,
         profilPic, 
         duration, 
@@ -63,9 +64,9 @@ router.post("/", auth, (req, res) => {
 })
 
 
-router.get("/:itineraryCity", (req, res) => {
-    const city = req.params.itineraryCity;
-    Itinerary.find({ city })
+router.get("/:cityId", (req, res) => {
+    const cityId = req.params.cityId;
+    Itinerary.find({ cityId })
         .exec()
         .then(doc => {
             if (doc) {
@@ -82,8 +83,7 @@ router.get("/:itineraryCity", (req, res) => {
         })
 })
 
-
-router.get("/", (res) => {
+router.get("/", (req, res) => {
     Itinerary.find()
         .sort({
             created: -1

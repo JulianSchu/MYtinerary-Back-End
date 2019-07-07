@@ -10,6 +10,10 @@ const itinerarySchema = mongoose.Schema({
         type: String,
         required: true
     },
+    cityId: {
+        type: String,
+        required: true
+    },
     country: {
         type: String,
         required: true
@@ -35,8 +39,7 @@ const itinerarySchema = mongoose.Schema({
         required: true
     },
     activities: {
-        type: Array,
-        default: [{url: 'There is no activities to show yet.'}]
+        type: Array
     },
     hashtag: {
         type: String
