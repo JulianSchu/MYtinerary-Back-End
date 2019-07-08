@@ -7,14 +7,14 @@ const Comment = require('../models/comment')
 
 router.post("/", auth, (req, res) => {
 
-    const { userName, userId, profilPic, comment, itId, created } = req.body;
+    const { _id, userName, userId, profilPic, comment, itId, created } = req.body;
     
     if(!comment) {
         return res.status(400).send('Please leave a comment!');
     }
 
     const newComment = new Comment({
-        _id: new mongoose.Types.ObjectId(),
+        _id,
         userName, 
         userId, 
         profilPic, 
@@ -78,7 +78,7 @@ router.get("/", (req, res) => {
 
 router.delete("/:id", auth, (req, res) => {
     const id = req.params.id;
-    Itinerary.remove({
+    Comment.remove({
             _id: id
         })
         .exec()
@@ -87,9 +87,7 @@ router.delete("/:id", auth, (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({
-                error: err
-            })
+            res.status(500).send(err)
         })
 })
 
