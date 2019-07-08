@@ -7,7 +7,7 @@ const Itinerary = require('../models/itinerary')
 
 router.post("/", auth, (req, res) => {
 
-    const { title, city, cityId, country, userName, profilPic, duration, price, activities, hashtag } = req.body;
+    const { title, city, cityId, country, userName, userId, profilPic, duration, price, activities, hashtag } = req.body;
 
     if(!title) {
         return res.status(400).send('Please enter title!');
@@ -36,6 +36,7 @@ router.post("/", auth, (req, res) => {
     const newItinerary = new Itinerary({
         _id: new mongoose.Types.ObjectId(),
         userName,
+        userId,
         title, 
         city, 
         cityId,
@@ -111,9 +112,7 @@ router.delete("/:itineraryId", auth, (req, res) => {
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json({
-                error: err
-            })
+            res.status(500).send(err)
         })
 })
 
